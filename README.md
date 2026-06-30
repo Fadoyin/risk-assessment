@@ -5,8 +5,10 @@ Clinical worksheet for documenting suicide, self-harm, and risk-to-others assess
 ## Deploy to Vercel
 
 1. Import this repository in [Vercel](https://vercel.com/new).
-2. In the Vercel project, open **Storage** → **Create Database** → **KV** and connect it to the project.
-3. Deploy. No other environment variables are required.
+2. Set **Framework Preset** to **Other** (not Create React App).
+3. Leave **Build Command** empty and **Output Directory** as `.` (or use the defaults from `vercel.json`).
+4. In the Vercel project, open **Storage** → **Create Database** → **KV** and connect it to the project.
+5. Deploy. No other environment variables are required.
 
 The app serves a static `index.html` and uses `/api/responses` with Vercel KV for shared storage across users.
 
