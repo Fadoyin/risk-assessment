@@ -1,0 +1,9 @@
+{
+  "name": "risk-assessment",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Psychiatric risk assessment clinical worksheet",
+  "dependencies": {
+    "@vercel/kv": "^3.0.0"
+  }
+}

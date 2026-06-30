@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Psychiatric Risk Assessment — Form</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F7F5F0;
+    --paper-raised:#FFFFFF;
+    --ink:#1E2530;
+    --ink-soft:#5B6573;
+    --line:#D9D3C5;
+    --teal:#2B6464;
+    --teal-soft:#E6EEEC;
+    --amber:#9C6B2E;
+    --amber-soft:#F4ECDD;
+    --red:#A4453A;
+    --red-soft:#F6E6E4;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;}
+  .topbar{
+    background:var(--ink);color:var(--paper);padding:12px 28px;
+    display:flex;justify-content:space-between;align-items:center;
+    font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.04em;
+    position:sticky;top:0;z-index:20;
+  }
+  .topbar .nav{display:flex;gap:6px;}
+  .topbar button{
+    background:transparent;border:1px solid rgba(247,245,240,0.25);color:var(--paper);
+    font-family:'Inter',sans-serif;font-size:12px;padding:6px 12px;border-radius:4px;cursor:pointer;
+  }
+  .topbar button.active{background:var(--paper);color:var(--ink);border-color:var(--paper);}
+
+  .progress-track{height:4px;background:var(--line);position:sticky;top:41px;z-index:19;}
+  .progress-fill{height:100%;background:var(--red);width:0%;transition:width .25s ease;}
+
+  .page{max-width:760px;margin:0 auto;padding:0 24px 80px;}
+
+  header.masthead{padding:36px 0 24px;}
+  header.masthead .eyebrow{
+    font-family:'JetBrains Mono',monospace;font-size:11px;text-transform:uppercase;
+    letter-spacing:0.08em;color:var(--red);margin-bottom:8px;
+  }
+  header.masthead h1{font-family:'Source Serif 4',serif;font-weight:700;font-size:30px;margin:0 0 8px;letter-spacing:-0.01em;}
+  header.masthead p{margin:0;color:var(--ink-soft);font-size:14px;line-height:1.55;}
+
+  .id-card{
+    background:var(--paper-raised);border:1px solid var(--line);border-left:3px solid var(--red);
+    border-radius:6px;padding:18px 20px;margin:22px 0 8px;display:flex;gap:24px;flex-wrap:wrap;
+  }
+  .id-card .f{flex:1;min-width:140px;}
+  .id-card label{
+    font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;
+    letter-spacing:0.06em;color:var(--ink-soft);display:block;margin-bottom:5px;
+  }
+  .id-card input{
+    border:none;border-bottom:1px solid var(--line);background:transparent;
+    font-family:'Inter',sans-serif;font-size:14px;padding:4px 2px;width:100%;color:var(--ink);
+  }
+  .id-card input:focus{outline:none;border-bottom-color:var(--red);}
+
+  .section-card{
+    background:var(--paper-raised);border:1px solid var(--line);border-radius:8px;
+    margin-top:18px;padding:26px 26px 22px;
+  }
+  .section-head{display:flex;align-items:baseline;gap:10px;margin-bottom:6px;}
+  .section-num{
+    font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--red);
+    background:var(--red-soft);padding:2px 7px;border-radius:2px;
+  }
+  .section-card h2{font-family:'Source Serif 4',serif;font-size:20px;font-weight:600;margin:0;}
+  .section-hint{font-size:12.5px;color:var(--ink-soft);margin:2px 0 18px;}
+
+  .field{margin-bottom:18px;}
+  .field-label{font-size:13px;font-weight:500;color:var(--ink);margin-bottom:8px;display:block;}
+  .pill-group{display:flex;flex-wrap:wrap;gap:7px;}
+  .pill{
+    border:1px solid var(--line);background:var(--paper);color:var(--ink);font-size:13px;
+    padding:7px 14px;border-radius:16px;cursor:pointer;transition:all .12s ease;user-select:none;
+  }
+  .pill:hover{border-color:var(--red);}
+  .pill.active{background:var(--teal);border-color:var(--teal);color:#fff;}
+  .pill.active.elevated{background:var(--amber);border-color:var(--amber);}
+  .pill.active.high{background:var(--red);border-color:var(--red);}
+
+  textarea.note-extra{
+    width:100%;border:1px solid var(--line);background:var(--paper);border-radius:4px;
+    font-family:'Inter',sans-serif;font-size:13px;padding:9px 11px;resize:vertical;
+    min-height:38px;color:var(--ink);
+  }
+  textarea.note-extra:focus{outline:none;border-color:var(--red);}
+  textarea.note-extra::placeholder{color:#B7B0A0;}
+
+  .submit-bar{display:flex;justify-content:space-between;align-items:center;margin-top:30px;padding-top:20px;border-top:1px solid var(--line);}
+  .submit-bar .hint{font-size:12px;color:var(--ink-soft);}
+  .btn{
+    font-family:'Inter',sans-serif;font-size:14px;font-weight:500;padding:10px 20px;border-radius:5px;
+    border:1px solid var(--line);background:var(--paper-raised);color:var(--ink);cursor:pointer;
+  }
+  .btn.primary{background:var(--red);color:#fff;border-color:var(--red);}
+  .btn.primary:hover{background:#823830;}
+  .btn:hover{border-color:var(--red);}
+  .btn:disabled{opacity:0.5;cursor:not-allowed;}
+
+  .confirm{background:var(--paper-raised);border:1px solid var(--line);border-radius:8px;padding:32px 28px;margin-top:24px;}
+  .confirm .check{
+    width:40px;height:40px;border-radius:50%;background:var(--red-soft);color:var(--red);
+    display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:14px;
+  }
+  .confirm h2{font-family:'Source Serif 4',serif;font-size:22px;margin:0 0 6px;}
+  .confirm p{color:var(--ink-soft);font-size:14px;margin:0 0 18px;}
+  .narrative-box{
+    font-family:'Source Serif 4',serif;font-size:15px;line-height:1.75;background:var(--paper);
+    border:1px solid var(--line);border-radius:6px;padding:18px 20px;margin-bottom:18px;
+  }
+
+  .responses-toolbar{display:flex;gap:10px;margin:24px 0 16px;flex-wrap:wrap;align-items:center;}
+  .responses-toolbar input{
+    flex:1;min-width:180px;border:1px solid var(--line);background:var(--paper-raised);
+    border-radius:5px;padding:9px 12px;font-family:'Inter',sans-serif;font-size:13px;
+  }
+  .responses-toolbar input:focus{outline:none;border-color:var(--red);}
+  .response-item{background:var(--paper-raised);border:1px solid var(--line);border-radius:7px;padding:16px 20px;margin-bottom:12px;}
+  .response-item.flagged{border-left:3px solid var(--red);}
+  .response-item .meta{
+    font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-soft);
+    margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;gap:10px;
+  }
+  .response-item .meta .badges{display:flex;gap:6px;flex-wrap:wrap;}
+  .badge{
+    font-family:'Inter',sans-serif;font-size:10px;padding:2px 8px;border-radius:10px;
+    background:var(--teal-soft);color:var(--teal);
+  }
+  .badge.elevated{background:var(--amber-soft);color:var(--amber);}
+  .badge.high{background:var(--red-soft);color:var(--red);}
+  .response-item .meta button{
+    font-family:'Inter',sans-serif;font-size:11px;border:1px solid var(--line);background:transparent;
+    color:var(--ink-soft);padding:3px 9px;border-radius:3px;cursor:pointer;
+  }
+  .response-item .meta button:hover{border-color:var(--red);color:var(--red);}
+  .response-item .text{font-size:14px;line-height:1.65;font-family:'Source Serif 4',serif;}
+  .empty-state{text-align:center;padding:60px 20px;color:var(--ink-soft);font-size:14px;}
+  .privacy-note{
+    font-size:12px;color:var(--amber);background:var(--amber-soft);border:1px solid #E5D3AD;
+    border-radius:5px;padding:10px 14px;margin:18px 0;
+  }
+  .crisis-note{
+    font-size:12px;color:var(--red);background:var(--red-soft);border:1px solid #E3C2BD;
+    border-radius:5px;padding:10px 14px;margin:18px 0;
+  }
+  footer{
+    padding:18px 0 50px;font-size:11px;color:var(--ink-soft);font-family:'JetBrains Mono',monospace;
+    border-top:1px solid var(--line);margin-top:30px;
+  }
+  .hidden{display:none !important;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span>PSYCHIATRIC RISK ASSESSMENT</span>
+  <div class="nav">
+    <button id="navFill" class="active">Fill out form</button>
+    <button id="navResponses">View responses (<span id="navCount">0</span>)</button>
+  </div>
+</div>
+<div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+
+<div class="page" id="fillView">
+  <header class="masthead">
+    <div class="eyebrow">Clinical worksheet</div>
+    <h1>Risk Assessment</h1>
+    <p>Work through each section to assess suicide, self-harm, and risk-to-others factors. Submitting generates a narrative summary and adds it to the shared response list.</p>
+  </header>
+
+  <div class="crisis-note">This tool supports documentation only. It does not replace clinical judgment, supervision, or your service's safeguarding / crisis protocol. If immediate risk is identified, follow local emergency procedures.</div>
+  <div class="privacy-note">Responses submitted here are visible to anyone with this form's link, under "View responses." Don't include identifying patient information beyond initials.</div>
+
+  <div class="id-card">
+    <div class="f"><label>Patient initials</label><input type="text" id="pInitials" placeholder="e.g. J.D."></div>
+    <div class="f"><label>Date of assessment</label><input type="date" id="pDate"></div>
+    <div class="f"><label>Clinician</label><input type="text" id="pClinician" placeholder=""></div>
+  </div>
+
+  <div id="formSections"></div>
+
+  <div class="submit-bar">
+    <span class="hint" id="completionHint">0 of 6 sections started</span>
+    <button class="btn primary" id="submitBtn">Submit response</button>
+  </div>
+
+  <div class="confirm hidden" id="confirmBox">
+    <div class="check">✓</div>
+    <h2>Response recorded</h2>
+    <p>This risk assessment has been added to the shared response list.</p>
+    <div class="narrative-box" id="confirmNarrative"></div>
+    <button class="btn" id="newResponseBtn">Start another response</button>
+    <button class="btn" id="goToResponsesBtn">View all responses</button>
+  </div>
+
+  <footer>For clinical documentation support only — does not replace professional judgment, supervision, or local safeguarding protocols.</footer>
+</div>
+
+<div class="page hidden" id="responsesView">
+  <header class="masthead">
+    <div class="eyebrow">Shared responses</div>
+    <h1>Collected assessments</h1>
+    <p>Everyone with this form's link can see the responses below. Entries flagged elevated or high risk are highlighted.</p>
+  </header>
+  <div class="responses-toolbar">
+    <input type="text" id="searchBox" placeholder="Search by initials, clinician, or text…">
+    <button class="btn" id="refreshBtn">Refresh</button>
+  </div>
+  <div id="responsesList"></div>
+  <footer>Private patient identifiers should not be entered into this shared form.</footer>
+</div>
+
+<script>
+const appStorage = {
+  _localKeys(){ return Object.keys(localStorage).filter(k => k.startsWith('risk-response:')); },
+  async set(key, value){
+    if(window.storage?.set) return window.storage.set(key, value, true);
+    try{
+      const entry = JSON.parse(value);
+      const res = await fetch('/api/responses', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify(entry)
+      });
+      if(res.ok) return {};
+    }catch(e){}
+    localStorage.setItem(key, value);
+    return {};
+  },
+  async list(prefix){
+    if(window.storage?.list) return window.storage.list(prefix, true);
+    try{
+      const res = await fetch('/api/responses');
+      if(res.ok){
+        const entries = await res.json();
+        return { keys: entries.map(e => e.key) };
+      }
+    }catch(e){}
+    return { keys: this._localKeys() };
+  },
+  async get(key){
+    if(window.storage?.get) return window.storage.get(key, true);
+    try{
+      const res = await fetch('/api/responses');
+      if(res.ok){
+        const entries = await res.json();
+        const entry = entries.find(e => e.key === key);
+        if(entry) return { value: JSON.stringify(entry) };
+      }
+    }catch(e){}
+    const value = localStorage.getItem(key);
+    return value ? { value } : null;
+  },
+  async delete(key){
+    if(window.storage?.delete) return window.storage.delete(key, true);
+    try{
+      const res = await fetch(`/api/responses?key=${encodeURIComponent(key)}`, { method:'DELETE' });
+      if(res.ok) return;
+    }catch(e){}
+    localStorage.removeItem(key);
+  }
+};
+
+const DOMAINS = [
+  { key:'suicide', title:'Suicidal Ideation & Behaviour', num:'01', hint:'Current thoughts, intent, plan, and means.',
+    fields:[
+      {key:'ideation', label:'Current suicidal ideation', options:['None reported','Passive (wish to be dead)','Active, without plan','Active, with plan'], risk:['Active, without plan','Active, with plan']},
+      {key:'intent', label:'Intent', options:['No intent expressed','Ambivalent','Clear intent expressed'], risk:['Clear intent expressed']},
+      {key:'plan', label:'Plan', options:['No plan','Vague plan','Specific, detailed plan'], risk:['Specific, detailed plan']},
+      {key:'means', label:'Access to means', options:['No access identified','Limited access','Ready access'], risk:['Ready access']},
+      {key:'history', label:'History of attempts', options:['No prior attempts','One prior attempt','Multiple prior attempts'], risk:['Multiple prior attempts']},
+    ]},
+  { key:'selfharm', title:'Self-Harm', num:'02', hint:'Current and past non-suicidal self-injury.',
+    fields:[
+      {key:'current', label:'Current self-harm behaviour', options:['None reported','Occasional','Frequent / ongoing'], risk:['Frequent / ongoing']},
+      {key:'history', label:'History of self-harm', options:['No history','Past, isolated episode(s)','Past, repeated / chronic pattern'], risk:['Past, repeated / chronic pattern']},
+      {key:'function', label:'Apparent function (if known)', options:['Not applicable','Emotional regulation','Communication / help-seeking','Other / unclear']},
+    ]},
+  { key:'others', title:'Risk to Others', num:'03', hint:'Violent ideation, history, and current intent.',
+    fields:[
+      {key:'ideation', label:'Violent ideation', options:['None reported','Vague / non-specific','Specific target identified'], risk:['Specific target identified']},
+      {key:'history', label:'History of violence', options:['No history','Past, isolated incident','Past, pattern of violence'], risk:['Past, pattern of violence']},
+      {key:'weapons', label:'Access to weapons', options:['No access identified','Limited access','Ready access'], risk:['Ready access']},
+      {key:'intent', label:'Current intent', options:['No intent expressed','Ambivalent','Clear intent expressed'], risk:['Clear intent expressed']},
+    ]},
+  { key:'factors', title:'Risk & Protective Factors', num:'04', hint:'Contextual factors that raise or lower overall risk.',
+    fields:[
+      {key:'substance', label:'Substance use', options:['None current','Occasional use','Active / heavy use'], risk:['Active / heavy use']},
+      {key:'support', label:'Social support', options:['Strong support network','Limited support','Isolated / no support'], risk:['Isolated / no support']},
+      {key:'stressors', label:'Recent stressors', options:['None identified','Some present','Significant / acute stressors'], risk:['Significant / acute stressors']},
+      {key:'engagement', label:'Engagement with services', options:['Well engaged','Partially engaged','Disengaged'], risk:['Disengaged']},
+    ]},
+  { key:'fourp', title:'Clinical Formulation (4 Ps)', num:'05', hint:'Select any factors that apply. You can pick more than one per category.',
+    fields:[
+      {key:'predisposing', label:'Predisposing factors', multi:true, options:['Family history of mental illness','Genetic vulnerability','Early childhood adversity','Insecure attachment','Personality vulnerability traits','Chronic physical health condition']},
+      {key:'precipitating', label:'Precipitating factors', multi:true, options:['Recent bereavement','Relationship breakdown','Job loss / financial stress','Acute substance use','Recent trauma','Medication non-adherence','Acute physical illness']},
+      {key:'perpetuating', label:'Perpetuating factors', multi:true, options:['Ongoing substance use','Social isolation','Unresolved interpersonal conflict','Poor treatment engagement','Chronic stressors persisting','Comorbid physical health problems']},
+      {key:'protective', label:'Protective factors', multi:true, options:['Strong family / social support','Engagement with treatment','Religious / spiritual beliefs','Responsibility for children / dependents','Future-oriented goals','Good coping skills','Stable housing / employment']},
+    ]},
+  { key:'formulation', title:'Overall Risk Formulation', num:'06', hint:'Clinical judgment of overall risk level, integrating the above.',
+    fields:[
+      {key:'suicideLevel', label:'Suicide risk level', options:['Low','Moderate','High','Imminent'], risk:['High','Imminent']},
+      {key:'selfharmLevel', label:'Self-harm risk level', options:['Low','Moderate','High'], risk:['High']},
+      {key:'othersLevel', label:'Risk to others level', options:['Low','Moderate','High','Imminent'], risk:['High','Imminent']},
+    ]},
+  { key:'plan', title:'Safety Plan & Actions', num:'07', hint:'Use the notes field to record agreed actions, follow-up, and safeguarding steps.',
+    fields:[
+      {key:'planStatus', label:'Safety plan status', options:['Safety plan in place','Safety plan updated today','No safety plan in place','Not applicable']},
+      {key:'followup', label:'Follow-up arranged', options:['Routine follow-up','Urgent follow-up arranged','Referral made','Admission considered / arranged']},
+    ]},
+];
+
+const PHRASES = {
+  ideation_suicide:{'None reported':'No suicidal ideation was reported','Passive (wish to be dead)':'Passive suicidal ideation was reported, including a wish to be dead','Active, without plan':'Active suicidal ideation was reported, without a specific plan','Active, with plan':'Active suicidal ideation was reported, with a specific plan'},
+  intent_suicide:{'No intent expressed':'no intent was expressed','Ambivalent':'intent was ambivalent','Clear intent expressed':'clear intent was expressed'},
+  plan_suicide:{'No plan':'no plan was described','Vague plan':'a vague plan was described','Specific, detailed plan':'a specific, detailed plan was described'},
+  means_suicide:{'No access identified':'no access to means was identified','Limited access':'limited access to means was identified','Ready access':'ready access to means was identified'},
+  history_suicide:{'No prior attempts':'There is no history of prior suicide attempts','One prior attempt':'There is a history of one prior suicide attempt','Multiple prior attempts':'There is a history of multiple prior suicide attempts'},
+
+  current_selfharm:{'None reported':'No current self-harm behaviour was reported','Occasional':'Occasional self-harm behaviour was reported','Frequent / ongoing':'Frequent, ongoing self-harm behaviour was reported'},
+  history_selfharm:{'No history':'with no prior history of self-harm','Past, isolated episode(s)':'with a history of past, isolated self-harm episode(s)','Past, repeated / chronic pattern':'with a history of repeated, chronic self-harm'},
+  function_selfharm:{'Not applicable':null,'Emotional regulation':'The apparent function appeared related to emotional regulation','Communication / help-seeking':'The apparent function appeared related to communication or help-seeking','Other / unclear':'The function of self-harm behaviour was unclear'},
+
+  ideation_others:{'None reported':'No violent ideation was reported','Vague / non-specific':'Vague, non-specific violent ideation was reported','Specific target identified':'Violent ideation with a specific identified target was reported'},
+  history_others:{'No history':'There is no history of violence','Past, isolated incident':'There is a history of one past, isolated violent incident','Past, pattern of violence':'There is a history of a pattern of past violence'},
+  weapons_others:{'No access identified':'No access to weapons was identified','Limited access':'Limited access to weapons was identified','Ready access':'Ready access to weapons was identified'},
+  intent_others:{'No intent expressed':'No current intent to harm others was expressed','Ambivalent':'Intent to harm others was ambivalent','Clear intent expressed':'Clear intent to harm others was expressed'},
+
+  substance_factors:{'None current':'no current substance use','Occasional use':'occasional substance use','Active / heavy use':'active, heavy substance use'},
+  support_factors:{'Strong support network':'a strong social support network','Limited support':'limited social support','Isolated / no support':'social isolation with no identified support'},
+  stressors_factors:{'None identified':'no significant recent stressors identified','Some present':'some recent stressors present','Significant / acute stressors':'significant, acute recent stressors'},
+  engagement_factors:{'Well engaged':'good engagement with services','Partially engaged':'partial engagement with services','Disengaged':'disengagement from services'},
+
+  suicideLevel_formulation:{'Low':'low','Moderate':'moderate','High':'high','Imminent':'imminent'},
+  selfharmLevel_formulation:{'Low':'low','Moderate':'moderate','High':'high'},
+  othersLevel_formulation:{'Low':'low','Moderate':'moderate','High':'high','Imminent':'imminent'},
+
+  planStatus_plan:{'Safety plan in place':'A safety plan is already in place','Safety plan updated today':'The safety plan was updated during this assessment','No safety plan in place':'No safety plan is currently in place','Not applicable':null},
+  followup_plan:{'Routine follow-up':'Routine follow-up has been arranged','Urgent follow-up arranged':'Urgent follow-up has been arranged','Referral made':'A referral has been made','Admission considered / arranged':'Admission has been considered or arranged'},
+};
+
+const state = {};
+const notes = {};
+DOMAINS.forEach(d=> state[d.key] = {});
+
+const formSections = document.getElementById('formSections');
+DOMAINS.forEach(domain=>{
+  const card = document.createElement('div');
+  card.className = 'section-card';
+  card.innerHTML = `<div class="section-head"><span class="section-num">${domain.num}</span><h2>${domain.title}</h2></div><div class="section-hint">${domain.hint}</div>`;
+
+  domain.fields.forEach(field=>{
+    const fieldDiv = document.createElement('div');
+    fieldDiv.className = 'field';
+    const label = document.createElement('span');
+    label.className = 'field-label';
+    label.textContent = field.label;
+    fieldDiv.appendChild(label);
+
+    const pillGroup = document.createElement('div');
+    pillGroup.className = 'pill-group';
+    field.options.forEach(opt=>{
+      const pill = document.createElement('button');
+      pill.type = 'button';
+      pill.className = 'pill';
+      pill.textContent = opt;
+      const isRisk = field.risk && field.risk.includes(opt);
+      pill.addEventListener('click', ()=>{
+        if(field.multi){
+          const arr = state[domain.key][field.key] || [];
+          const idx = arr.indexOf(opt);
+          if(idx > -1){
+            arr.splice(idx,1);
+            pill.classList.remove('active');
+          } else {
+            arr.push(opt);
+            pill.classList.add('active');
+          }
+          if(arr.length){
+            state[domain.key][field.key] = arr;
+          } else {
+            delete state[domain.key][field.key];
+          }
+        } else {
+          const current = state[domain.key][field.key];
+          const isActive = current === opt;
+          [...pillGroup.children].forEach(c=>c.classList.remove('active','elevated','high'));
+          if(isActive){
+            delete state[domain.key][field.key];
+          } else {
+            pill.classList.add('active');
+            if(isRisk) pill.classList.add(opt==='Imminent'?'high':'elevated');
+            state[domain.key][field.key] = opt;
+          }
+        }
+        updateProgress();
+      });
+      pillGroup.appendChild(pill);
+    });
+    fieldDiv.appendChild(pillGroup);
+    card.appendChild(fieldDiv);
+  });
+
+  const noteField = document.createElement('div');
+  noteField.className = 'field';
+  noteField.style.marginBottom = '0';
+  const noteLabel = document.createElement('span');
+  noteLabel.className = 'field-label';
+  noteLabel.textContent = domain.key==='plan' ? 'Safety plan / actions notes' : 'Additional detail (optional)';
+  noteField.appendChild(noteLabel);
+  const textarea = document.createElement('textarea');
+  textarea.className = 'note-extra';
+  textarea.placeholder = domain.key==='plan' ? 'e.g. agreed safety plan steps, who was contacted, follow-up date…' : `e.g. specific detail to fold into the ${domain.title.toLowerCase()} sentence…`;
+  textarea.addEventListener('input', ()=>{
+    notes[domain.key] = textarea.value.trim();
+    updateProgress();
+  });
+  noteField.appendChild(textarea);
+  card.appendChild(noteField);
+
+  formSections.appendChild(card);
+});
+
+function updateProgress(){
+  const started = DOMAINS.filter(d => Object.keys(state[d.key]).length > 0 || notes[d.key]).length;
+  document.getElementById('completionHint').textContent = `${started} of ${DOMAINS.length} sections started`;
+  document.getElementById('progressFill').style.width = `${Math.round((started/DOMAINS.length)*100)}%`;
+}
+
+function noteSentence(domainKey){
+  const n = notes[domainKey];
+  if(!n) return '';
+  return ' ' + n.charAt(0).toUpperCase() + n.slice(1) + (n.endsWith('.')?'':'.');
+}
+
+function generateNarrative(){
+  const out = [];
+
+  {
+    const s = state.suicide;
+    const bits = [];
+    if(s.ideation) bits.push(PHRASES.ideation_suicide[s.ideation]);
+    if(s.intent) bits.push('Regarding intent, ' + PHRASES.intent_suicide[s.intent]);
+    if(s.plan) bits.push('Regarding plan, ' + PHRASES.plan_suicide[s.plan]);
+    if(s.means) bits.push(PHRASES.means_suicide[s.means].charAt(0).toUpperCase()+PHRASES.means_suicide[s.means].slice(1));
+    if(s.history) bits.push(PHRASES.history_suicide[s.history]);
+    if(bits.length) out.push(bits.join('. ') + '.' + noteSentence('suicide'));
+  }
+  {
+    const s = state.selfharm;
+    const bits = [];
+    if(s.current && s.history) bits.push(PHRASES.current_selfharm[s.current] + ', ' + PHRASES.history_selfharm[s.history]);
+    else if(s.current) bits.push(PHRASES.current_selfharm[s.current]);
+    else if(s.history) bits.push('No current self-harm was reported, ' + PHRASES.history_selfharm[s.history]);
+    if(s.function && PHRASES.function_selfharm[s.function]) bits.push(PHRASES.function_selfharm[s.function]);
+    if(bits.length) out.push(bits.join('. ') + '.' + noteSentence('selfharm'));
+  }
+  {
+    const s = state.others;
+    const bits = [];
+    if(s.ideation) bits.push(PHRASES.ideation_others[s.ideation]);
+    if(s.history) bits.push(PHRASES.history_others[s.history]);
+    if(s.weapons) bits.push(PHRASES.weapons_others[s.weapons]);
+    if(s.intent) bits.push(PHRASES.intent_others[s.intent]);
+    if(bits.length) out.push(bits.join('. ') + '.' + noteSentence('others'));
+  }
+  {
+    const s = state.factors;
+    const bits = [];
+    if(s.substance) bits.push(PHRASES.substance_factors[s.substance]);
+    if(s.support) bits.push(PHRASES.support_factors[s.support]);
+    if(s.stressors) bits.push(PHRASES.stressors_factors[s.stressors]);
+    if(s.engagement) bits.push(PHRASES.engagement_factors[s.engagement]);
+    if(bits.length) out.push('Contextual factors include ' + bits.join(', ') + '.' + noteSentence('factors'));
+  }
+  {
+    const s = state.fourp;
+    const lines = [];
+    const labelMap = {predisposing:'Predisposing factors', precipitating:'Precipitating factors', perpetuating:'Perpetuating factors', protective:'Protective factors'};
+    ['predisposing','precipitating','perpetuating','protective'].forEach(k=>{
+      const arr = s[k];
+      if(arr && arr.length){
+        const list = arr.map(x=>x.charAt(0).toLowerCase()+x.slice(1));
+        const joined = list.length > 1 ? list.slice(0,-1).join(', ') + ', and ' + list[list.length-1] : list[0];
+        lines.push(`${labelMap[k]} include ${joined}.`);
+      }
+    });
+    if(lines.length) out.push(lines.join(' ') + noteSentence('fourp'));
+  }
+  {
+    const s = state.formulation;
+    const bits = [];
+    if(s.suicideLevel) bits.push('suicide risk was judged to be ' + PHRASES.suicideLevel_formulation[s.suicideLevel]);
+    if(s.selfharmLevel) bits.push('self-harm risk was judged to be ' + PHRASES.selfharmLevel_formulation[s.selfharmLevel]);
+    if(s.othersLevel) bits.push('risk to others was judged to be ' + PHRASES.othersLevel_formulation[s.othersLevel]);
+    if(bits.length){
+      let line = 'On overall formulation, ' + bits.join(', and ') + '.';
+      out.push(line + noteSentence('formulation'));
+    }
+  }
+  {
+    const s = state.plan;
+    const bits = [];
+    if(s.planStatus && PHRASES.planStatus_plan[s.planStatus]) bits.push(PHRASES.planStatus_plan[s.planStatus]);
+    if(s.followup) bits.push(PHRASES.followup_plan[s.followup]);
+    if(bits.length) out.push(bits.join('. ') + '.' + noteSentence('plan'));
+  }
+
+  return out.join(' ');
+}
+
+function highestRiskBadges(){
+  const badges = [];
+  const f = state.formulation;
+  if(f.suicideLevel) badges.push({label:'Suicide: '+f.suicideLevel, level:f.suicideLevel});
+  if(f.selfharmLevel) badges.push({label:'Self-harm: '+f.selfharmLevel, level:f.selfharmLevel});
+  if(f.othersLevel) badges.push({label:'Risk to others: '+f.othersLevel, level:f.othersLevel});
+  return badges;
+}
+function levelClass(level){
+  if(level==='High' || level==='Imminent') return 'high';
+  if(level==='Moderate') return 'elevated';
+  return '';
+}
+
+document.getElementById('submitBtn').addEventListener('click', async ()=>{
+  const text = generateNarrative();
+  if(!text){
+    alert('Make at least one selection before submitting.');
+    return;
+  }
+  const submitBtn = document.getElementById('submitBtn');
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Submitting…';
+
+  const submittedAt = Date.now();
+  const key = `risk-response:${submittedAt}:${Math.random().toString(36).slice(2,8)}`;
+  const entry = {
+    key,
+    submittedAt,
+    initials: document.getElementById('pInitials').value || '—',
+    date: document.getElementById('pDate').value || '—',
+    clinician: document.getElementById('pClinician').value || '—',
+    text,
+    badges: highestRiskBadges()
+  };
+
+  try{
+    const res = await appStorage.set(key, JSON.stringify(entry));
+    if(!res){
+      alert('Submission failed, please try again.');
+      submitBtn.disabled = false; submitBtn.textContent = 'Submit response';
+      return;
+    }
+    document.getElementById('confirmNarrative').textContent = text;
+    document.getElementById('confirmBox').classList.remove('hidden');
+    document.querySelectorAll('.section-card').forEach(c=>c.classList.add('hidden'));
+    document.getElementById('submitBtn').parentElement.classList.add('hidden');
+    document.querySelector('.id-card').classList.add('hidden');
+    document.querySelector('.privacy-note').classList.add('hidden');
+    document.querySelector('.crisis-note').classList.add('hidden');
+    window.scrollTo({top:0, behavior:'smooth'});
+    refreshResponseCount();
+  }catch(e){
+    alert('Submission failed: storage unavailable.');
+  }
+  submitBtn.disabled = false; submitBtn.textContent = 'Submit response';
+});
+
+document.getElementById('newResponseBtn').addEventListener('click', ()=>{
+  DOMAINS.forEach(d=> state[d.key] = {});
+  Object.keys(notes).forEach(k=> delete notes[k]);
+  document.querySelectorAll('.pill.active').forEach(p=>p.classList.remove('active','elevated','high'));
+  document.querySelectorAll('.note-extra').forEach(t=>t.value='');
+  document.getElementById('pInitials').value='';
+  document.getElementById('pClinician').value='';
+  document.getElementById('pDate').valueAsDate = new Date();
+  document.getElementById('confirmBox').classList.add('hidden');
+  document.querySelectorAll('.section-card').forEach(c=>c.classList.remove('hidden'));
+  document.getElementById('submitBtn').parentElement.classList.remove('hidden');
+  document.querySelector('.id-card').classList.remove('hidden');
+  document.querySelector('.privacy-note').classList.remove('hidden');
+  document.querySelector('.crisis-note').classList.remove('hidden');
+  updateProgress();
+  window.scrollTo({top:0, behavior:'smooth'});
+});
+
+document.getElementById('pDate').valueAsDate = new Date();
+
+const navFill = document.getElementById('navFill');
+const navResponses = document.getElementById('navResponses');
+const fillView = document.getElementById('fillView');
+const responsesView = document.getElementById('responsesView');
+
+function showFill(){
+  navFill.classList.add('active'); navResponses.classList.remove('active');
+  fillView.classList.remove('hidden'); responsesView.classList.add('hidden');
+}
+function showResponses(){
+  navResponses.classList.add('active'); navFill.classList.remove('active');
+  responsesView.classList.remove('hidden'); fillView.classList.add('hidden');
+  loadResponses();
+}
+navFill.addEventListener('click', showFill);
+navResponses.addEventListener('click', showResponses);
+document.getElementById('goToResponsesBtn').addEventListener('click', showResponses);
+document.getElementById('refreshBtn').addEventListener('click', loadResponses);
+
+let allResponses = [];
+
+async function refreshResponseCount(){
+  try{
+    const keysRes = await appStorage.list('risk-response:');
+    const count = (keysRes && keysRes.keys) ? keysRes.keys.length : 0;
+    document.getElementById('navCount').textContent = count;
+  }catch(e){ }
+}
+
+async function loadResponses(){
+  const listEl = document.getElementById('responsesList');
+  listEl.innerHTML = '<div class="empty-state">Loading…</div>';
+  try{
+    const keysRes = await appStorage.list('risk-response:');
+    const keys = (keysRes && keysRes.keys) ? keysRes.keys : [];
+    document.getElementById('navCount').textContent = keys.length;
+    if(keys.length === 0){
+      listEl.innerHTML = '<div class="empty-state">No responses submitted yet.</div>';
+      allResponses = [];
+      return;
+    }
+    const entries = [];
+    for(const k of keys){
+      try{
+        const r = await appStorage.get(k);
+        if(r && r.value) entries.push(JSON.parse(r.value));
+      }catch(e){ }
+    }
+    entries.sort((a,b)=> b.submittedAt - a.submittedAt);
+    allResponses = entries;
+    renderResponses(entries);
+  }catch(e){
+    listEl.innerHTML = '<div class="empty-state">Could not load responses.</div>';
+  }
+}
+
+function renderResponses(entries){
+  const listEl = document.getElementById('responsesList');
+  if(entries.length === 0){
+    listEl.innerHTML = '<div class="empty-state">No responses match your search.</div>';
+    return;
+  }
+  listEl.innerHTML = '';
+  entries.forEach(entry=>{
+    const item = document.createElement('div');
+    const hasHigh = (entry.badges||[]).some(b=>levelClass(b.level)==='high');
+    item.className = 'response-item' + (hasHigh ? ' flagged' : '');
+
+    const meta = document.createElement('div');
+    meta.className = 'meta';
+    const left = document.createElement('span');
+    left.textContent = `${entry.initials} · ${entry.date} · ${entry.clinician} · ${new Date(entry.submittedAt).toLocaleString()}`;
+
+    const badgesWrap = document.createElement('span');
+    badgesWrap.className = 'badges';
+    (entry.badges||[]).forEach(b=>{
+      const badge = document.createElement('span');
+      badge.className = 'badge ' + levelClass(b.level);
+      badge.textContent = b.label;
+      badgesWrap.appendChild(badge);
+    });
+
+    const delBtn = document.createElement('button');
+    delBtn.textContent = 'Delete';
+    delBtn.addEventListener('click', async ()=>{
+      if(!confirm('Delete this response for everyone?')) return;
+      await appStorage.delete(entry.key);
+      loadResponses();
+    });
+
+    const metaRow = document.createElement('div');
+    metaRow.style.display = 'flex';
+    metaRow.style.justifyContent = 'space-between';
+    metaRow.style.width = '100%';
+    metaRow.style.alignItems = 'center';
+    metaRow.appendChild(left);
+    metaRow.appendChild(delBtn);
+
+    meta.appendChild(metaRow);
+    if((entry.badges||[]).length) meta.appendChild(badgesWrap);
+
+    const text = document.createElement('div');
+    text.className = 'text';
+    text.textContent = entry.text;
+
+    item.appendChild(meta);
+    item.appendChild(text);
+    listEl.appendChild(item);
+  });
+}
+
+document.getElementById('searchBox').addEventListener('input', (e)=>{
+  const q = e.target.value.toLowerCase().trim();
+  if(!q){ renderResponses(allResponses); return; }
+  const filtered = allResponses.filter(r =>
+    (r.initials||'').toLowerCase().includes(q) ||
+    (r.clinician||'').toLowerCase().includes(q) ||
+    (r.text||'').toLowerCase().includes(q)
+  );
+  renderResponses(filtered);
+});
+
+updateProgress();
+refreshResponseCount();
+</script>
+</body>
+</html>
